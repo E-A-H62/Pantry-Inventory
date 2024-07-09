@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Inventory</title>
+</head>
+<body>
+    <h1>Edit Inventory</h1>
+
+    <form action="/edit" method="POST">
+        <label for="added">Enter the amount of {{item}} to add:</label>
+        <input type="number" id="added" name="added" required/>
+
+        <label for="removed">Enter the amount of {{item}} to remove:</label>
+        <input type="number" id="removed" name="removed" required/>
+
+        <label for="price">Enter the price of {{item}}</label>
+        <input type="number" id="price" name="price" required/>
+
+        <button type="submit">Edit Item</button>
+    </form>
+
+    <h2>Inventory List</h2>
+    <ul>
+
+    </ul>
+
+    <form action="/inventory" method="GET">
+        <button type="submit" class="btn btn-primary">Back</button>
+    </form>
+</body>
+</html>
