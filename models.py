@@ -12,25 +12,28 @@ class PantryItem(db.Model):
     price = db.Column(db.Float, nullable = False)
 
     def __repr__(self):
-        return f'<PantryItem {self.item}>'
+        return f'<PantryItem {self.item} (x{self.quantity}) cost ${self.price}>'
     
 
-    def add_item(self, item_name, quant, price):
-        new_item = PantryItem(item=item_name, quantity=int(quant), price=price)
-        db.session.add(new_item)
-        db.session.commit()
+def add_item(item_name, quant, price):
+    new_item = PantryItem(item=item_name, quantity=int(quant), price=price)
+    db.session.add(new_item)
+    db.session.commit()
     
 
-    def edit_item(self, item_name, quant):
-        item = PantryItem.query.get(item_name)
+def edit_item(item_name, quant):
+    item = db.session.query(PantryItem).filter_by(item=item_name).first()
+    if item:
         item.quantity = int(quant)
         db.session.commit()
+    else:
+        print("Item not found.")
     
 
-    def remove_item(self, item_name):
-        item = PantryItem.query.get_or_404(item_name)
-        db.session.delete(item)
-        db.session.commit()
+def remove_item(item_name):
+    item = db.session.query(PantryItem).filter_by(item=item_name).first()
+    db.session.delete(item)
+    db.session.commit()
 
 
 # Initialize the database
@@ -39,3 +42,14 @@ with app.app_context():
     db.drop_all()
     # Create table
     db.create_all()
+
+    # Testing the database functions
+    add_item(item_name="Milk", quant=1, price=2.8)
+    add_item(item_name="Eggs", quant=12, price=6.3)
+    print(PantryItem.query.all())
+
+    edit_item(item_name="Eggs", quant=10)
+    print(PantryItem.query.all())
+
+    remove_item(item_name="Milk")
+    print(PantryItem.query.all())
