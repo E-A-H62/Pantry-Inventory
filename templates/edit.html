@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Inventory</title>
+</head>
+<body>
+    <h1>Edit Inventory</h1>
+
+    <form action="/edit" method="POST">
+        <label for="item">What item do you wish to edit?</label>
+        <input type="text" id="item" name="item" required>
+        <label for="quantity">What is the new amount of this item?</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <button type="submit">Edit Item</button>
+    </form>
+
+    <h2>Inventory List</h2>
+    <ul>
+        {% for entry in pantry_items %}
+            <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="/" method="GET">
+        <button type="submit" class="btn btn-primary">Home</button>
+    </form>
+</body>
+</html>

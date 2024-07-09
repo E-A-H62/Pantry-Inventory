@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Inventory</title>
+</head>
+<body>
+    <h1>My Pantry Inventory</h1>
+
+    <form action="/inventory" method="POST">
+        <label for="item">Enter an item:</label>
+        <input type="text" id="item" name="item" required>
+        <label for="quantity">Enter quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <h2>Inventory List</h2>
+    <ul>
+        {% for entry in pantry_items %}
+            <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="/" method="GET">
+        <button type="submit" class="btn btn-primary">Home</button>
+    </form>
+</body>
+</html>
+
