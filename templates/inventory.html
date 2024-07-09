@@ -19,7 +19,7 @@
     <h2>Inventory List</h2>
     <ul>
         {% for entry in pantry_items %}
-            <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+            <li>{{ entry.item.capitalize() }} - Quantity: {{ entry.quantity }}</li>
         {% endfor %}
     </ul>
 

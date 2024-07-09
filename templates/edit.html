@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantry Inventory</title>
+    <title>Edit Pantry Inventory</title>
 </head>
 <body>
-    <h1>Edit Inventory</h1>
+    <h1>Edit Pantry Inventory</h1>
 
     <form action="/edit" method="POST">
-        <label for="item">What item do you wish to edit?</label>
-        <input type="text" id="item" name="item" required>
-        <label for="quantity">What is the new amount of this item?</label>
+        <label for="item_id">Select an item:</label>
+        <select id="item_id" name="item_id" required>
+            {% for entry in pantry_items %}
+                <option value="{{ entry.id }}">{{ entry.item.capitalize() }}</option>
+            {% endfor %}
+        </select>
+        <label for="quantity">Enter new quantity:</label>
         <input type="number" id="quantity" name="quantity" required>
-        <button type="submit">Edit Item</button>
+        <button type="submit">Update Item</button>
     </form>
 
-    <h2>Inventory List</h2>
+    <h2>Current Inventory List</h2>
     <ul>
         {% for entry in pantry_items %}
-            <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+            <li>{{ entry.item.capitalize() }} - Quantity: {{ entry.quantity }}</li>
         {% endfor %}
     </ul>
 
