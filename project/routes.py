@@ -60,9 +60,18 @@ def edit(item):
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
+    user_name = "Your Name"
+    user_email = "your.email@example.com"
+
+
     if request.method == 'POST':
         try:
             repo = git.Repo('/home/PantryInventory/SEO-Project2')
+
+            with repo.config_writer() as git_config:
+                git_config.set_value('user', 'name', user_name)
+                git_config.set_value('user', 'email', user_email)
+                
             origin = repo.remotes.origin
             origin.pull()
             return 'Updated PythonAnywhere successfully', 200
