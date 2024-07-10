@@ -25,6 +25,10 @@
   h2 {
     font-size: 18px;
   }
+
+  ul {
+    align-items: center;
+  }
   
   /* Form Styles */
   
