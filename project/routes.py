@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from project import app, db
-from project.models import add_item, remove_item, edit_item, fetch_item, fetch_items
+from project.models import PantryItem, add_item, remove_item, edit_item, fetch_item, fetch_items
 from project.recipes_api import get_recipes_from_api
 
 @app.route("/")
@@ -59,7 +59,8 @@ def edit(item):
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
-    ingredients = 'apples,flour,sugar'  # Example ingredients
+    pantry_items = PantryItem.query.all()
+    ingredients = ",".join([item.item for item in pantry_items])
     recipe_data = get_recipes_from_api(ingredients)
     return render_template("recipes.html", recipes=recipe_data)
 
