@@ -58,6 +58,17 @@ def edit(item):
 
     return render_template("edit_inventory.html", item=item)
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+
+        # something
+
+        # redirect
+        return redirect(url_for("search"))
+    
+    # return the render template
+
 
 if __name__ == "__main__":
     app.run(debug=True)
