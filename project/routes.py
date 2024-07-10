@@ -1,3 +1,4 @@
+import git
 from flask import render_template, request, redirect, url_for, flash
 from project import app, db
 from project.models import add_item, remove_item, edit_item, fetch_item, fetch_items
@@ -56,6 +57,16 @@ def edit(item):
         return redirect(url_for("inventory"))
 
     return render_template("edit_inventory.html", item=item, item_object=item_object)
+
+@app.route("/update_server", methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/home/PantryInventory/SEO-Project2')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
