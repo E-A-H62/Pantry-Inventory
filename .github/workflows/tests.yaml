@@ -1,0 +1,22 @@
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.11.3
+
+      - name: Install tools
+        run: |
+          python -m pip install --upgrade pip pytest
+          pip install flask
+          pip install sqlalchemy flask-sqlalchemy
+
+      - name: Tests database
+        run: python3 -m unittest tests/tests.py
+
+      - name: Tests webpages
+        run: python3 -m unittest tests/tests_app.py
