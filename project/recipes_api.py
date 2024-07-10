@@ -1,11 +1,12 @@
 import requests
 import os
 
+API_KEY = os.getenv("SPOONACULAR_API_KEY") 
+
 def get_recipes_from_api(ingredients):
     api_url = "https://api.spoonacular.com/recipes/findByIngredients"
-    api_key = os.getenv("SPOONACULAR_API_KEY") 
     params = {
-        'apiKey': api_key,
+        'apiKey': API_KEY,
         'ingredients': ingredients,
         'number': 5,  # Number of recipes to return
         'ranking': 1,
@@ -14,6 +15,5 @@ def get_recipes_from_api(ingredients):
     response = requests.get(api_url, params=params)
     if response.status_code == 200:
         return response.json()
-    else:
-        print(f"Error: {response.status_code}")
-        return []
+    print(f"Error: {response.status_code}")
+    return None
