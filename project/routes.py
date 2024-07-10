@@ -61,12 +61,17 @@ def edit(item):
 @app.route("/update_server", methods=['POST'])
 def webhook():
     if request.method == 'POST':
-        repo = git.Repo('/home/PantryInventory/SEO-Project2')
-        origin = repo.remotes.origin
-        origin.pull()
-        return 'Updated PythonAnywhere successfully', 200
-    else:
-        return 'Wrong event type', 400
+        try:
+            repo = git.Repo('/home/PantryInventory/SEO-Project2')
+            origin = repo.remotes.origin
+            origin.pull()
+            return 'Updated PythonAnywhere successfully', 200
+        except Exception as e:
+            print(origin)
+            print(e)
+        
+    
+    return 'Wrong event type', 400
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
