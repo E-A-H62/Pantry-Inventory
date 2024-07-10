@@ -1,8 +1,8 @@
-from app import app
-from models import PantryItem, add_item, edit_item, remove_item, db
+from project import app, db
+from project.models import PantryItem, add_item, edit_item, remove_item
 import sys
 import unittest
-sys.path.append('../SEO-Project2')
+sys.path.append('../SEO-Project2/project')
 
 
 class TestModels(unittest.TestCase):
@@ -30,11 +30,11 @@ class TestModels(unittest.TestCase):
 
     def test_edit_item(self):
         add_item(item_name="Eggs", quant=12, price=6.3)
-        edit_item(item_name="Eggs", quant=10)
+        edit_item(item_name="Eggs", quant=10, price=3.4)
         eggs = PantryItem.query.filter_by(item="Eggs").first()
         self.assertIsNotNone(eggs)
-        self.assertEqual(eggs.quantity, 10)
-        self.assertEqual(eggs.price, 6.3)
+        self.assertEqual(eggs.quantity, 22)
+        self.assertEqual(eggs.price, 3.4)
 
     def test_remove_item(self):
         add_item(item_name="Milk", quant=1, price=2.8)

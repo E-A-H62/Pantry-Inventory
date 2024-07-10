@@ -1,7 +1,7 @@
-from app import app
+from project import app
 import sys
 import unittest
-sys.path.append('../SEO-Project2')
+sys.path.append('../SEO-Project2/project')
 
 
 class TestApp(unittest.TestCase):
