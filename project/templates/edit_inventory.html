@@ -24,6 +24,11 @@
     </form>
 
     <h2>Inventory List</h2>
+    <ul>
+        <li><b>{{ item }}</b></li>
+            <li>- Quantity: {{ item_object.quantity }}</li>
+            <li>- Price: {{ item_object.price }}</li>
+    </ul>
 
     <form action="/inventory" method="GET">
         <button type="submit" class="btn btn-primary">Back</button>

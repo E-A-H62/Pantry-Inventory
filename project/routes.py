@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
-
-app = Flask(__name__)
+from flask import render_template, request, redirect, url_for, flash
+from project import app, db
+from project.models import add_item, remove_item, edit_item, fetch_item, fetch_items
 
 
 @app.route("/")
@@ -10,18 +10,15 @@ def home():
 
 @app.route("/inventory", methods=["GET", "POST"])
 def inventory():
-    # fetch pantry items
-    pantry_items = ["water", "milk"]  # temp
+    pantry_items = fetch_items()
 
     if request.method == "POST":
         item = request.form["item"]
 
-        print(item)
-
         # get function call to retrieve pricing from name primary key
-        price = 1  # temp
-
-        if price:
+        item_object = fetch_item(item)
+        
+        if not item_object:
             return redirect(url_for("add", item=item))
 
         return redirect(url_for("edit", item=item))
@@ -36,7 +33,7 @@ def add(item):
         price = request.form["price"]
 
         # add item to database
-        print(quantity, price)
+        add_item(item, quantity, price)
 
         return redirect(url_for("inventory"))
 
@@ -44,19 +41,21 @@ def add(item):
 
 
 # needs work to become fully functional
-@app.route("/edit/<int:item>", methods=["GET", "POST"])
+@app.route("/edit/<item>", methods=["GET", "POST"])
 def edit(item):
+    item_object = fetch_item(item)
+
     if request.method == "POST":
-        added = request.form["added"]
-        removed = request.form["removed"]
+        added = int(request.form["added"])
+        removed = int(request.form["removed"])
         price = request.form["price"]
 
         # update item in database
-        print(added, removed, price)
-        print(item)
+        edit_item(item, added-removed, price)
+
         return redirect(url_for("inventory"))
 
-    return render_template("edit_inventory.html", item=item)
+    return render_template("edit_inventory.html", item=item, item_object=item_object)
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
