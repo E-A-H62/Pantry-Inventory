@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Suggestions</title>
+    <link rel="stylesheet" href="\static\style.css">
+</head>
+<body>
+    <h1>Recipe Suggestions</h1>
+    <div class="recipe-container">
+        {% if recipes %}
+            {% for recipe in recipes %}
+                <div class="recipe-card">
+                    <h2>{{ recipe.title }}</h2>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    <p><strong>Used Ingredients:</strong></p>
+                    <ul>
+                        {% for ingredient in recipe.usedIngredients %}
+                        <li>{{ ingredient.original }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p><strong>Missed Ingredients:</strong></p>
+                    <ul>
+                        {% for ingredient in recipe.missedIngredients %}
+                        <li>{{ ingredient.original }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No recipes found for the given ingredients.</p>
+        {% endif %}
+    </div>
+    <a href="\inventory">Back to Inventory</a>
+</body>
+</html>

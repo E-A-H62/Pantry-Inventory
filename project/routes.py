@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from project import app, db
 from project.models import add_item, remove_item, edit_item, fetch_item, fetch_items
-
+from project.recipes_api import get_recipes_from_api
 
 @app.route("/")
 def home():
@@ -57,17 +57,11 @@ def edit(item):
 
     return render_template("edit_inventory.html", item=item, item_object=item_object)
 
-@app.route("/search", methods=["GET", "POST"])
-def search():
-    if request.method == "POST":
-
-        # something
-
-        # redirect
-        return redirect(url_for("search"))
-    
-    # return the render template
-
+@app.route("/recipes", methods=["GET", "POST"])
+def recipes():
+    ingredients = 'apples,flour,sugar'  # Example ingredients
+    recipe_data = get_recipes_from_api(ingredients)
+    return render_template("recipes.html", recipes=recipe_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
