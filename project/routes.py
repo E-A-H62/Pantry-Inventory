@@ -18,6 +18,8 @@ def inventory():
     if request.method == "POST":
         item = request.form["item"]
 
+        item = item.capitalize()
+
         # get function call to retrieve pricing from name primary key
         item_object = fetch_item(item)
 
