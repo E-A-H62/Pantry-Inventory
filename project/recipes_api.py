@@ -1,7 +1,8 @@
 import requests
 import os
 
-API_KEY = os.getenv("SPOONACULAR_API_KEY") 
+API_KEY = os.getenv("SPOONACULAR_API_KEY")
+
 
 def get_recipes_from_api(ingredients):
     api_url = "https://api.spoonacular.com/recipes/findByIngredients"
