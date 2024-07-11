@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Suggestions</title>
-    <link rel="stylesheet" href="\static\style.css">
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block title %}Recipe Suggestions{% endblock %}
+
+{% block content %}
     <h1>Recipe Suggestions</h1>
     <div class="recipe-container">
         {% if recipes %}
@@ -33,5 +29,4 @@
         {% endif %}
     </div>
     <a href="\inventory">Back to Inventory</a>
-</body>
-</html>
+{% endblock %}

@@ -1,11 +1,8 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <title>Pantry Inventory</title>
-    </head>
-    <body>
+{% extends "layout.html" %}
+
+{% block title %}Pantry Inventory{% endblock %}
+
+{% block content %}
         <div class="container">
             <h1>Pantry Inventory</h1>
             <form action="/inventory" method="GET">
@@ -13,10 +10,9 @@
             </form>
 
             <h1>Recipe Search</h1>
-            <form action="/search" method="GET">
+            <form action="/recipes" method="GET">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
         </div>
-    </body>
-</html>
+{% endblock %}
