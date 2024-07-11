@@ -1,7 +1,10 @@
-from flask import render_template, request, redirect, url_for, flash
-from project import app, db
-from project.models import PantryItem, add_item, remove_item, edit_item, fetch_item, fetch_items
+import git
+from flask import render_template, request, redirect, url_for, flash  # noqa: F401, E501
+from project import app, db  # noqa: F401
+from project.models import add_item, edit_item, remove_item  # noqa: F401
+from project.models import PantryItem, fetch_item, fetch_items
 from project.recipes_api import get_recipes_from_api
+
 
 @app.route("/")
 def home():
@@ -17,7 +20,7 @@ def inventory():
 
         # get function call to retrieve pricing from name primary key
         item_object = fetch_item(item)
-        
+
         if not item_object:
             return redirect(url_for("add", item=item))
 
@@ -55,7 +58,20 @@ def edit(item):
 
         return redirect(url_for("inventory"))
 
-    return render_template("edit_inventory.html", item=item, item_object=item_object)
+    return render_template(
+        "edit_inventory.html", item=item, item_object=item_object)
+
+
+@app.route("/update_server", methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/home/PantryInventory/SEO-Project2')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
+
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
@@ -63,6 +79,7 @@ def recipes():
     ingredients = ",".join([item.item for item in pantry_items])
     recipe_data = get_recipes_from_api(ingredients)
     return render_template("recipes.html", recipes=recipe_data)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

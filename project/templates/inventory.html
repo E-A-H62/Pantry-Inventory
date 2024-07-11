@@ -15,12 +15,14 @@
         <button type="submit">Check Item</button>
     </form>
 
-    <h2>Inventory List</h2>
-    <ul>
-        {% for entry in pantry_items %}
-            <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h2>Inventory List</h2>
+        <ul>
+            {% for entry in pantry_items %}
+                <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 
     <form action="/" method="GET">
         <button type="submit" class="btn btn-primary">Home</button>

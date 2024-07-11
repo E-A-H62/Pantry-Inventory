@@ -23,12 +23,14 @@
         <button type="submit">Edit Item</button>
     </form>
 
-    <h2>Inventory List</h2>
-    <ul>
-        <li><b>{{ item }}</b></li>
-            <li>- Quantity: {{ item_object.quantity }}</li>
-            <li>- Price: {{ item_object.price }}</li>
-    </ul>
+    <div class="container">
+        <h2>Item to be Edited</h2>
+        <ul>
+            <li><b>{{ item }}</b></li>
+                - Quantity: {{ item_object.quantity }}
+                <br>- Price: {{ item_object.price }}
+        </ul>
+    </div>
 
     <form action="/inventory" method="GET">
         <button type="submit" class="btn btn-primary">Back</button>

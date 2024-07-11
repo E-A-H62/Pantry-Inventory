@@ -8,4 +8,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-import project.models as models, project.routes as routes
+import project.models as models, project.routes as routes  # noqa: F401, E402, E401, E501
