@@ -2,7 +2,7 @@ import git
 from flask import render_template, request, redirect, url_for, flash  # noqa: F401, E501
 from project import app, db  # noqa: F401
 from project.models import add_item, edit_item, remove_item  # noqa: F401
-from project.models import fetch_item, fetch_items
+from project.models import PantryItem, fetch_item, fetch_items
 from project.recipes_api import get_recipes_from_api
 
 
@@ -75,7 +75,8 @@ def webhook():
 
 @app.route("/recipes", methods=["GET", "POST"])
 def recipes():
-    ingredients = 'apples,flour,sugar'  # Example ingredients
+    pantry_items = PantryItem.query.all()
+    ingredients = ",".join([item.item for item in pantry_items])
     recipe_data = get_recipes_from_api(ingredients)
     return render_template("recipes.html", recipes=recipe_data)
 
