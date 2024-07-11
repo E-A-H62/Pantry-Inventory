@@ -1,7 +1,8 @@
 import requests
-import os
+import os  # noqa: F401
 
 API_KEY = "0208676f55b94fbd8840797c7f099e83"
+
 
 def get_recipes_from_api(ingredients):
     api_url = "https://api.spoonacular.com/recipes/findByIngredients"
