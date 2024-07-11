@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Flask App{% endblock %}</title>
+    <link rel="stylesheet" href="\static\style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="project\templates\home.html">Home</a></li>
+            <li><a href="project\templates\add_inventory.html">Inventory</a></li>
+            <li><a href="project\templates\recipes.html">Recipes</a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
