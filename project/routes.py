@@ -18,6 +18,8 @@ def inventory():
     if request.method == "POST":
         item = request.form["item"]
 
+        item = item.capitalize()
+
         # get function call to retrieve pricing from name primary key
         item_object = fetch_item(item)
 
@@ -64,13 +66,27 @@ def edit(item):
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
+    user_name = "Your Name"
+    user_email = "your.email@example.com"
+
+
     if request.method == 'POST':
-        repo = git.Repo('/home/PantryInventory/SEO-Project2')
-        origin = repo.remotes.origin
-        origin.pull()
-        return 'Updated PythonAnywhere successfully', 200
-    else:
-        return 'Wrong event type', 400
+        try:
+            repo = git.Repo('/home/PantryInventory/SEO-Project2')
+
+            with repo.config_writer() as git_config:
+                git_config.set_value('user', 'name', user_name)
+                git_config.set_value('user', 'email', user_email)
+                
+            origin = repo.remotes.origin
+            origin.pull()
+            return 'Updated PythonAnywhere successfully', 200
+        except Exception as e:
+            print(origin)
+            print(e)
+        
+    
+    return 'Wrong event type', 400
 
 
 @app.route("/recipes", methods=["GET", "POST"])
