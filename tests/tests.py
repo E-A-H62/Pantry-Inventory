@@ -2,7 +2,8 @@ from project import app, db
 from project.models import PantryItem, add_item, edit_item, remove_item
 import sys
 import unittest
-sys.path.append('../SEO-Project2/project')
+
+sys.path.append("../SEO-Project2/project")
 
 
 class TestModels(unittest.TestCase):
