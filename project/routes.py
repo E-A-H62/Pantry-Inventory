@@ -4,12 +4,41 @@ from project import app, db  # noqa: F401
 from project.models import add_item, edit_item, remove_item  # noqa: F401
 from project.models import PantryItem, fetch_item, fetch_item_id, fetch_items
 from project.recipes_api import get_recipes_from_api
+from project.models import User
+
 
 user_id = 1234
 
 @app.route("/")
 def home():
-    return render_template("home.html", user_id = user_id)
+    #return render_template("home.html", user_id = user_id)
+    return render_template('register.html') # just for now 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        # hashed_password = generate_password_hash(password, method='sha256')
+        new_user = User(username=username, password=password, email=email)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Account created!', category='success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            return redirect(url_for('inventory', user_id=user.user_id))
+        else:
+            flash('Login failed. Check your credentials', category='error')
+    return render_template('login.html')
 
 
 @app.route("/<user_id>/inventory", methods=["GET", "POST"])
