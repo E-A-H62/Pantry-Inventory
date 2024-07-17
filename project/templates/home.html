@@ -5,12 +5,12 @@
 {% block content %}
         <div class="container">
             <h1>Pantry Inventory</h1>
-            <form action="/inventory" method="GET">
+            <form action="{{ url_for('inventory' , user_id = user_id) }}" method="GET">
                 <button type="submit" class="btn btn-primary">View List</button>
             </form>
 
             <h1>Recipe Search</h1>
-            <form action="/recipes" method="GET">
+            <form action="{{ url_for('recipes' , user_id = user_id) }}" method="GET">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
