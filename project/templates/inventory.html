@@ -5,7 +5,7 @@
 {% block content %}
     <h1>My Pantry Inventory</h1>
 
-    <form action="/inventory" method="POST">
+    <form action="{{ url_for('inventory' , user_id = user_id) }}" method="POST">
         <p>To add or edit an item enter the name below</p>
         <label for="item">Enter an item:</label>
         <input type="text" id="item" name="item" required/>
