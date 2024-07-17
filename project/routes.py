@@ -4,6 +4,7 @@ from project import app, db  # noqa: F401
 from project.models import add_item, edit_item, remove_item  # noqa: F401
 from project.models import PantryItem, fetch_item, fetch_items
 from project.recipes_api import get_recipes_from_api
+from project.budget import Budget
 
 
 @app.route("/")
@@ -95,6 +96,47 @@ def recipes():
     ingredients = ",".join([item.item for item in pantry_items])
     recipe_data = get_recipes_from_api(ingredients)
     return render_template("recipes.html", recipes=recipe_data)
+
+
+bud = Budget(0)
+@app.route("/shopping", methods=["GET", "POST"])
+def shopping():
+    budget = bud.get()
+    budget = format(budget, ".2f")
+    pantry_items = fetch_items()
+    if request.method == "POST" and budget == 0:
+        return redirect(url_for("set_budget", budget=budget))
+    elif request.method == "POST" and budget != 0:
+        return redirect(url_for("edit_budget", budget=budget))
+        
+    return render_template("shopping.html", pantry_items=pantry_items, budget=budget)
+        
+
+@app.route("/set_budget/<budget>", methods=["GET", "POST"])
+def set_budget(budget):
+
+    if request.method == "POST":
+        # set budget here
+        amount = float(request.form["amount"])
+        bud.edit_budget(amount)
+        return redirect(url_for("shopping"))
+
+    return render_template("set_budget.html", budget=budget)
+
+@app.route("/edit_budget/<budget>", methods=["GET", "POST"])
+def edit_budget(budget):
+
+    if request.method == "POST":
+        # edit budget here
+        action = request.form["action"]
+        amount = float(request.form["amount"])
+        if action == "Add":
+            bud.add(amount)
+        elif action == "Remove":
+            bud.sub(amount)
+        return redirect(url_for("shopping"))
+
+    return render_template("edit_budget.html", budget=budget)
 
 
 if __name__ == "__main__":

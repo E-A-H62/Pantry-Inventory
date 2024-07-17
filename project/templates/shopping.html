@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}Pantry Inventory{% endblock %}
+
+{% block content %}
+    <h1>Budget</h1>
+
+    <div class="container">
+        <h2>Current Budget</h2>
+        <h2>{{ budget }}</h2>
+    </div>
+
+    <div class="container">
+        <h2>Current Inventory Costs</h2>
+        <p>Amount spent from most recent expenditures</p>
+        <ul>
+            {% for entry in pantry_items %}
+                <li>{{ entry.item }} - Price: ${{ entry.price }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <form action="/shopping" method="POST">
+        <button type="submit">Edit Budget</button>
+    </form>
+{% endblock %}
