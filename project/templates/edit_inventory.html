@@ -5,15 +5,15 @@
 {% block content %}
     <h1>Edit Inventory</h1>
 
-    <form action="{{ url_for('edit', item=item, user_id = user_id) }}" method="POST">
+    <form action="{{ url_for('edit', item_id=item_id, user_id = user_id) }}" method="POST">
 
-        <label for="added">Enter the amount of {{item}} to add:</label>
+        <label for="added">Enter the amount of {{item_object.item}} to add:</label>
         <input type="number" id="added" name="added" required/>
 
-        <label for="removed">Enter the amount of {{item}} to remove:</label>
+        <label for="removed">Enter the amount of {{item_object.item}} to remove:</label>
         <input type="number" id="removed" name="removed" required/>
 
-        <label for="price">Enter the price of {{item}}</label>
+        <label for="price">Enter the price of {{item_object.item}}</label>
         <input type="number" id="price" name="price" step="any" required/>
 
         <button type="submit">Edit Item</button>
@@ -22,7 +22,7 @@
     <div class="container">
         <h2>Item to be Edited</h2>
         <ul>
-            <li><b>{{ item }}</b></li>
+            <li><b>{{ item_object.item }}</b></li>
                 - Quantity: {{ item_object.quantity }}
                 <br>- Price: {{ item_object.price }}
         </ul>

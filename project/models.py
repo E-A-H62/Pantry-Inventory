@@ -6,7 +6,7 @@ class PantryItem(db.Model):
     item = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    #user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f'<PantryItem {self.item} (x{self.quantity}) ${self.price}>'
@@ -18,14 +18,14 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
 
 
-def add_item(item_name, quant, price):
-    new_item = PantryItem(item=item_name, quantity=int(quant), price=float(price))
+def add_item(item_name, quant, price, user_id):
+    new_item = PantryItem(item=item_name, quantity=int(quant), price=float(price), user_id=user_id)
     db.session.add(new_item)
     db.session.commit()
 
 
-def edit_item(item_name, quant, price):
-    item = db.session.query(PantryItem).filter_by(item=item_name).first()
+def edit_item(item_id, quant, price):
+    item = fetch_item(item_id)
     if item:
         item.quantity += quant
         item.price = float(price)
@@ -34,21 +34,28 @@ def edit_item(item_name, quant, price):
         print("Item not found.")
 
 
-def remove_item(item_name):
-    item = db.session.query(PantryItem).filter_by(item=item_name).first()
+def remove_item(item_id):
+    item = fetch_item(item_id)
     db.session.delete(item)
     db.session.commit()
 
 
-def fetch_item(item_name):
-    return db.session.query(PantryItem).filter_by(item=item_name).first()
+def fetch_item(item_id):
+    return db.session.get(PantryItem, item_id)
+
+def fetch_item_id(item_name, user_id):
+    item = db.session.query(PantryItem).filter_by(item=item_name, user_id = user_id).first()
+
+    return item.id if item else item
 
 
-def fetch_items():
-    return db.session.query(PantryItem).all()
+def fetch_items(user_id):
+    return db.session.query(PantryItem).filter_by(user_id = user_id).all()
 
-def fetch_user(username, password):
-    return db.session.query(User).filter_by(username=username, password=password).first()
+def fetch_user_id(username, password):
+    user = db.session.query(User).filter_by(username=username, password=password).first()
+
+    return user.user_id if user else user
 
 def add_user(username, password, email):
     new_user= User( username = username, password = password, email = email)
