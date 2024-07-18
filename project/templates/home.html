@@ -9,6 +9,11 @@
                 <button type="submit" class="btn btn-primary">View List</button>
             </form>
 
+            <h1>Budget</h1>
+            <form action="{{ url_for('shopping' , user_id = user_id) }}" method="GET">
+                <button type="submit" class="btn btn-primary">View Budget</button>
+            </form>
+
             <h1>Recipe Search</h1>
             <form action="{{ url_for('recipes' , user_id = user_id) }}" method="GET">
                 <button type="submit" class="btn btn-primary">Search</button>
