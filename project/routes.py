@@ -135,13 +135,12 @@ def recipes(user_id):
 @app.route("/<user_id>/shopping", methods=["GET", "POST"])
 def shopping(user_id):
     budget_id = fetch_budget_id(user_id)
-    print(budget_id)
     budget = fetch_budget(budget_id)
-    print(budget)
     pantry_items = fetch_items(user_id)
+
     if not budget_id:
         budget = set_budget(user_id)
-        print(budget)
+
     if request.method == "POST":
         return redirect(url_for(
             "edit_budget", budget=budget, user_id=user_id))
@@ -157,10 +156,13 @@ def edit_budget(budget, user_id):
         # edit budget here
         action = request.form["action"]
         amount = float(request.form["amount"])
+
         if action == "Add":
             add_budget(amount, user_id)
+
         elif action == "Remove":
             sub_budget(amount, user_id)
+
         return redirect(url_for("shopping", user_id=user_id))
 
     return render_template("edit_budget.html", budget=budget, user_id=user_id)

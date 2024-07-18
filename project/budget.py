@@ -20,13 +20,13 @@ def set_budget(user_id):
     return new_budget
 
 
-def add_budget(added_amount, user_id):
-    budget = fetch_budget(user_id)
+def add_budget(added_amount, id):
+    budget = fetch_budget(id)
     budget.amount += added_amount
     db.session.commit()
 
 
-def sub_budget(sub_amount, user_id):
-    budget = fetch_budget(user_id)
+def sub_budget(sub_amount, id):
+    budget = fetch_budget(id)
     budget.amount -= sub_amount
     db.session.commit()
