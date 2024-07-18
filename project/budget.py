@@ -1,33 +1,32 @@
+from project import db
+from project.models import Budget
 
 
-class Budget():
-    def __init__(self, amount):
-        self.amount = float(amount)
-    
-    def __repr__(self):
-        return f'<Budget {self.amount}>'
-    
-    def get(self):
-        return float(self.amount)
-    
-    def edit_budget(self, new_amount):
-        self.amount = new_amount
-
-    def add(self, added_amount):
-        self.amount = self.amount + added_amount
-
-    def sub(self, sub_amount):
-        self.amount = self.amount - sub_amount
+def fetch_budget(id):
+    return db.session.get(Budget, id)
 
 
-"""budget = Budget(0)
-print(budget)
+def fetch_budget_id(user_id):
+    budget_id = (
+        db.session.query(Budget).filter_by(user_id=user_id).first()
+    )
+    return budget_id.id if budget_id else budget_id
 
-budget.edit_budget(200.00)
-print(budget)
 
-budget.add(50)
-print(budget)
+def set_budget(user_id):
+    new_budget = Budget(amount=0.00, user_id=user_id)
+    db.session.add(new_budget)
+    db.session.commit()
+    return new_budget
 
-budget.sub(50)
-print(budget)"""
+
+def add_budget(added_amount, user_id):
+    budget = fetch_budget(user_id)
+    budget.amount += added_amount
+    db.session.commit()
+
+
+def sub_budget(sub_amount, user_id):
+    budget = fetch_budget(user_id)
+    budget.amount -= sub_amount
+    db.session.commit()

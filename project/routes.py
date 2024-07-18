@@ -3,9 +3,9 @@ from flask import render_template, request, redirect, url_for, flash  # noqa: F4
 from project import app, db  # noqa: F401
 from project.models import add_item, edit_item, remove_item  # noqa: F401
 from project.models import PantryItem, fetch_item, fetch_item_id, fetch_items
+from project.budget import fetch_budget, set_budget, add_budget, sub_budget, fetch_budget_id  # noqa: E501
 from project.recipes_api import get_recipes_from_api
 from project.authentication import sign_in, sign_up
-from project.budget import Budget
 
 
 @app.route("/")
@@ -63,7 +63,8 @@ def inventory(user_id):
 
         return redirect(url_for("edit", item_id=item_id, user_id=user_id))
 
-    return render_template("inventory.html", pantry_items=pantry_items, user_id=user_id)
+    return render_template("inventory.html",
+                           pantry_items=pantry_items, user_id=user_id)
 
 
 @app.route("/<user_id>/add/<item>", methods=["GET", "POST"])
@@ -95,9 +96,8 @@ def edit(item_id, user_id):
 
         return redirect(url_for("inventory", user_id=user_id))
 
-    return render_template(
-        "edit_inventory.html", item_id=item_id, item_object=item_object, user_id=user_id
-    )
+    return render_template("edit_inventory.html", item_id=item_id,
+                           item_object=item_object, user_id=user_id)
 
 
 @app.route("/update_server", methods=["POST"])
@@ -128,89 +128,42 @@ def recipes(user_id):
     pantry_items = PantryItem.query.all()
     ingredients = ",".join([item.item for item in pantry_items])
     recipe_data = get_recipes_from_api(ingredients)
-    return render_template("recipes.html", recipes=recipe_data, user_id=user_id)
+    return render_template(
+        "recipes.html", recipes=recipe_data, user_id=user_id)
 
 
-bud = Budget(0)
-@app.route("/shopping", methods=["GET", "POST"])
-def shopping():
-    budget = bud.get()
-    budget = format(budget, ".2f")
-    pantry_items = fetch_items()
-    if request.method == "POST" and budget == 0:
-        return redirect(url_for("set_budget", budget=budget))
-    elif request.method == "POST" and budget != 0:
-        return redirect(url_for("edit_budget", budget=budget))
-        
-    return render_template("shopping.html", pantry_items=pantry_items, budget=budget)
-        
-
-@app.route("/set_budget/<budget>", methods=["GET", "POST"])
-def set_budget(budget):
-
+@app.route("/<user_id>/shopping", methods=["GET", "POST"])
+def shopping(user_id):
+    budget_id = fetch_budget_id(user_id)
+    print(budget_id)
+    budget = fetch_budget(budget_id)
+    print(budget)
+    pantry_items = fetch_items(user_id)
+    if not budget_id:
+        budget = set_budget(user_id)
+        print(budget)
     if request.method == "POST":
-        # set budget here
-        amount = float(request.form["amount"])
-        bud.edit_budget(amount)
-        return redirect(url_for("shopping"))
+        return redirect(url_for(
+            "edit_budget", budget=budget, user_id=user_id))
 
-    return render_template("set_budget.html", budget=budget)
+    return render_template("shopping.html", pantry_items=pantry_items,
+                           budget=budget, user_id=user_id)
 
-@app.route("/edit_budget/<budget>", methods=["GET", "POST"])
-def edit_budget(budget):
+
+@app.route("/<user_id>/edit_budget/<budget>", methods=["GET", "POST"])
+def edit_budget(budget, user_id):
 
     if request.method == "POST":
         # edit budget here
         action = request.form["action"]
         amount = float(request.form["amount"])
         if action == "Add":
-            bud.add(amount)
+            add_budget(amount, user_id)
         elif action == "Remove":
-            bud.sub(amount)
-        return redirect(url_for("shopping"))
+            sub_budget(amount, user_id)
+        return redirect(url_for("shopping", user_id=user_id))
 
-    return render_template("edit_budget.html", budget=budget)
-
-
-bud = Budget(0)
-@app.route("/shopping", methods=["GET", "POST"])
-def shopping():
-    budget = bud.get()
-    budget = format(budget, ".2f")
-    pantry_items = fetch_items()
-    if request.method == "POST" and budget == 0:
-        return redirect(url_for("set_budget", budget=budget))
-    elif request.method == "POST" and budget != 0:
-        return redirect(url_for("edit_budget", budget=budget))
-        
-    return render_template("shopping.html", pantry_items=pantry_items, budget=budget)
-        
-
-@app.route("/set_budget/<budget>", methods=["GET", "POST"])
-def set_budget(budget):
-
-    if request.method == "POST":
-        # set budget here
-        amount = float(request.form["amount"])
-        bud.edit_budget(amount)
-        return redirect(url_for("shopping"))
-
-    return render_template("set_budget.html", budget=budget)
-
-@app.route("/edit_budget/<budget>", methods=["GET", "POST"])
-def edit_budget(budget):
-
-    if request.method == "POST":
-        # edit budget here
-        action = request.form["action"]
-        amount = float(request.form["amount"])
-        if action == "Add":
-            bud.add(amount)
-        elif action == "Remove":
-            bud.sub(amount)
-        return redirect(url_for("shopping"))
-
-    return render_template("edit_budget.html", budget=budget)
+    return render_template("edit_budget.html", budget=budget, user_id=user_id)
 
 
 if __name__ == "__main__":

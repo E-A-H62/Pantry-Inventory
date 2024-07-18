@@ -16,13 +16,22 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(64), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    user_id = db.Column(
+        db.Integer, primary_key=True, autoincrement=True, unique=True)
+
+
+class Budget(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    amount = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f"{self.amount:.2f}"
 
 
 def add_item(item_name, quant, price, user_id):
-    new_item = PantryItem(
-        item=item_name, quantity=int(quant), price=float(price), user_id=user_id
-    )
+    new_item = PantryItem(item=item_name, quantity=int(quant),
+                          price=float(price), user_id=user_id)
     db.session.add(new_item)
     db.session.commit()
 
@@ -49,8 +58,8 @@ def fetch_item(item_id):
 
 def fetch_item_id(item_name, user_id):
     item = (
-        db.session.query(PantryItem).filter_by(item=item_name, user_id=user_id).first()
-    )
+        db.session.query(PantryItem).filter_by(
+            item=item_name, user_id=user_id).first())
 
     return item.id if item else item
 
@@ -61,8 +70,8 @@ def fetch_items(user_id):
 
 def fetch_user_id(username, password):
     user = (
-        db.session.query(User).filter_by(username=username, password=password).first()
-    )
+        db.session.query(User).filter_by(
+            username=username, password=password).first())
 
     return user.user_id if user else user
 
