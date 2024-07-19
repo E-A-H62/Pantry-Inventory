@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block title %}Pantry Inventory{% endblock %}
+
+{% block content %}
+    <h1>Shopping Cart</h1>
+
+    <div class="container">
+        <h2>Current Cart</h2>
+        <p>You are out of these items in your pantry.</p>
+        <ul>
+            {% for entry in pantry_items %}
+                {% if entry.quantity == 0 %}
+                    <li>
+                        {{ entry.item }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <p>You are running low on these items in your pantry.</p>
+        <ul>
+            {% for entry in pantry_items %}
+                {% if entry.quantity == 1 %}
+                    <li>
+                        {{ entry.item }}, expires 
+                        {{ entry.expiration }}, {{entry.quantity}} {{entry.unit}} left
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        function updateForm() {
+            var action = document.getElementById("action").value;
+            var formFields = document.getElementById("form-group");
+            formFields.innerHTML = '';
+
+            if (action == "Units") {
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "unit";
+                input.placeholder = "Enter new unit";
+                formFields.appendChild(input);
+            } else if (action == "Expiration") {
+                var input = document.createElement("input");
+                input.type = "date";
+                input.name = "expiration_date";
+                input.placeholder = "Enter new expiration date";
+                formFields.appendChild(input);
+            }
+        }
+    </script>
+
+    <form action="{{ url_for('cart', user_id = user_id) }}" method="POST">
+
+        <label for="item_id">Select an item:</label>
+        <select id="item_id" name="item_id" required>
+            {% for entry in pantry_items %}
+                <option value="{{ entry.id }}">{{ entry.item }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="action">Action:</label>
+        <select name="action" id="action" onchange="updateForm()">
+            <option value="Add">Add</option>
+            <option value="Remove">Remove</option>
+            <option value="Units">Edit Unit</option>
+            <option value="Expiration">Edit Expiration Date</option>
+        </select>
+        <div id="form-group"></div>
+        <br>
+        <form action="{{ url_for('cart' , user_id = user_id) }}" method="POST">
+            <button type="submit">Edit Cart</button>
+        </form>
+    </form>
+
+{% endblock %}

@@ -24,6 +24,10 @@
         <button type="submit">Edit Budget</button>
     </form>
 
+    <form action="{{ url_for('cart' , user_id = user_id) }}" method="GET">
+        <button type="submit">Cart</button>
+    </form>
+
     <form action="/" method="GET">
         <button type="submit" class="btn btn-primary">Home</button>
     </form>

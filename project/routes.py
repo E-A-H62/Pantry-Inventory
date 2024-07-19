@@ -1,7 +1,7 @@
 import git
-from flask import render_template, request, redirect, url_for, flash  # noqa: F401, E501
+from flask import render_template, request, redirect, url_for, flash  # noqa: E501
 from project import app, db  # noqa: F401
-from project.models import add_item, edit_item, remove_item  # noqa: F401
+from project.models import add_item, edit_item, remove_item, edit_unit, edit_expiration  # noqa: E501
 from project.models import PantryItem, fetch_item, fetch_item_id, fetch_items
 from project.budget import fetch_budget, set_budget, add_budget, sub_budget, fetch_budget_id  # noqa: E501
 from project.recipes_api import get_recipes_from_api
@@ -151,6 +151,7 @@ def recipes(user_id):
 
 @app.route("/<user_id>/shopping", methods=["GET", "POST"])
 def shopping(user_id):
+    # displays budget for user
     budget_id = fetch_budget_id(user_id)
     budget = fetch_budget(budget_id)
     pantry_items = fetch_items(user_id)
@@ -183,6 +184,34 @@ def edit_budget(budget, user_id):
         return redirect(url_for("shopping", user_id=user_id))
 
     return render_template("edit_budget.html", budget=budget, user_id=user_id)
+
+
+@app.route("/<user_id>/cart", methods=["GET", "POST"])
+def cart(user_id):
+    # edits items in carts
+    pantry_items = fetch_items(user_id)
+
+    if request.method == "POST":
+        action = request.form["action"]
+        item_id = request.form["item_id"]
+
+        if action == "Add":
+            return redirect(url_for("edit", item_id=item_id, user_id=user_id))
+
+        elif action == "Remove":
+            remove_item(item_id)
+
+        elif action == "Units":
+            unit = request.form["unit"]
+            edit_unit(item_id, unit)
+
+        elif action == "Expiration":
+            expiration = request.form["expiration_date"]
+            edit_expiration(item_id, expiration)
+        return redirect(url_for('cart', user_id=user_id))
+
+    return render_template(
+        "cart.html", pantry_items=pantry_items, user_id=user_id)
 
 
 if __name__ == "__main__":
