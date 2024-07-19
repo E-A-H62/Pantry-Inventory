@@ -15,7 +15,7 @@
         <p>Amount spent from most recent expenditures</p>
         <ul>
             {% for entry in pantry_items %}
-                <li>{{ entry.item }} - Price: ${{ entry.price }}</li>
+                <li>{{ entry.item }} - Price: ${{ "%.2f"|format(entry.price) }}</li>
             {% endfor %}
         </ul>
     </div>
