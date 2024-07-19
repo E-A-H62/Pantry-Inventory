@@ -15,8 +15,7 @@ class TestApp(unittest.TestCase):
         self.app_context.push()
         db.drop_all()
         db.create_all()
-        add_user(username="testuser",
-                 password="password", email="test@example.com")
+        add_user(username="testuser", password="password", email="test@example.com")
 
     def tearDown(self):
         # Remove the app context.
@@ -37,16 +36,13 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_edit_page(self):
-        response = self.app.get(
-            "/<user_id>/edit/<int:item>", follow_redirects=True)
+        response = self.app.get("/<user_id>/edit/<int:item>", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
     def test_shopping_page(self):
-        response = self.app.get(
-            "/<user_id>/edit/<int:item>", follow_redirects=True)
+        response = self.app.get("/<user_id>/edit/<int:item>", follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
     def test_budget_page(self):
-        response = self.app.get(
-            "/<user_id>/edit/<int:item>", follow_redirects=True)
+        response = self.app.get("/<user_id>/edit/<int:item>", follow_redirects=True)
         self.assertEqual(response.status_code, 200)

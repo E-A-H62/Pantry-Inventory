@@ -1,4 +1,5 @@
 .venv
 instance
 project\__pycache__
+project/__pycache__
 .DS_Store
