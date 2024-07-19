@@ -12,7 +12,7 @@
             {% for entry in pantry_items %}
                 {% if entry.quantity == 0 %}
                     <li>
-                        {{ entry.item }}
+                        <b>{{ entry.item }}</b>
                     </li>
                 {% endif %}
             {% endfor %}
@@ -22,8 +22,9 @@
             {% for entry in pantry_items %}
                 {% if entry.quantity == 1 %}
                     <li>
-                        {{ entry.item }}, expires 
-                        {{ entry.expiration }}, {{entry.quantity}} {{entry.unit}} left
+                        <b>{{ entry.item }}</b>
+                        <br>expires {{ entry.expiration }}
+                        <br>{{entry.quantity}} {{entry.unit}} left
                     </li>
                 {% endif %}
             {% endfor %}

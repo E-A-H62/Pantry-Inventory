@@ -12,6 +12,7 @@
             <li><a href="\">Home</a></li>
             <li><a href="\inventory">Inventory</a></li>
             <li><a href="\recipes">Recipes</a></li>
+            <li><a href="{{ url_for('profile', user_id = user_id) }}">Profile</a>></li>
         </ul>
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}
