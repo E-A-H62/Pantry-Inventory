@@ -7,9 +7,7 @@ def fetch_budget(id):
 
 
 def fetch_budget_id(user_id):
-    budget_id = (
-        db.session.query(Budget).filter_by(user_id=user_id).first()
-    )
+    budget_id = db.session.query(Budget).filter_by(user_id=user_id).first()
     return budget_id.id if budget_id else budget_id
 
 

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}"{{username}}'s Profile{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>User</h1>
+            <ul>
+                <li>Username: {{username}}</li>
+                <li>Email: {{email}}</li>
+            </ul>
+    </div>
+
+    <div class="container">
+
+        <form action="{{ url_for("update_username", user_id=user_id) }}" method="GET">
+            <button type="submit">Change Username</button>
+        </form>
+
+        <form action="{{ url_for("update_email", user_id=user_id) }}" method="GET">
+            <button type="submit">Change Email</button>
+        </form>
+
+        <form action="{{ url_for("update_password", user_id=user_id) }}" method="GET">
+            <button type="submit">Change Password</button>
+        </form>
+
+    </div>
+{% endblock %}

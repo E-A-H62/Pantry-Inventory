@@ -1,6 +1,14 @@
 from project import app, db
 from project.models import User, PantryItem
-from project.models import add_item, edit_item, remove_item, fetch_item, fetch_item_id, fetch_user_id, add_user  # noqa: E501
+from project.models import (
+    add_item,
+    edit_item,
+    remove_item,
+    fetch_item,
+    fetch_item_id,
+    fetch_user_id,
+    add_user,
+)  # noqa: E501
 import sys
 import unittest
 
@@ -66,14 +74,14 @@ class TestModels(unittest.TestCase):
         self.assertIsNotNone(item_id)
 
     def test_fetch_user_id(self):
-        add_user(username="testuser",
-                 password="password", email="test@example.com")
+        add_user(username="testuser", password="password", email="test@example.com")
         user_id = fetch_user_id(username="testuser", password="password")
         self.assertIsNotNone(user_id)
 
     def test_add_user(self):
-        result = add_user(username="newuser",
-                          password="newpassword", email="new@example.com")
+        result = add_user(
+            username="newuser", password="newpassword", email="new@example.com"
+        )
         self.assertTrue(result)
         new_user = User.query.filter_by(username="newuser").first()
         self.assertIsNotNone(new_user)
