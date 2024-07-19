@@ -24,7 +24,7 @@
         <ul>
             <li><b>{{ item_object.item }}</b></li>
                 - Quantity: {{ item_object.quantity }}
-                <br>- Price: {{ item_object.price }}
+                <br>- Cost: {{ "$%.2f"|format(item_object.price) }}
         </ul>
     </div>
 

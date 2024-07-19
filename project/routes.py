@@ -20,12 +20,13 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         email = request.form.get("email")
-        # hashed_password = generate_password_hash(password, method='sha256')
+        # hashed_password = generate_password_hash(password, method="sha256")
 
         if sign_up(username, password, email):
+            user_id = sign_in(username, password)
+            budget = set_budget(user_id)  # noqa: F841
+            flash("Account created!", category="success")
             return redirect(url_for("login"))
-
-        # flash('Account created!', category='success')
 
     return render_template("register.html")
 
@@ -41,7 +42,7 @@ def login():
         if user_id:
             return redirect(url_for("inventory", user_id=user_id))
 
-        # let user know their information is incorrect
+        flash("Create account to login!", category="error")
 
     return render_template("login.html")
 
@@ -75,6 +76,14 @@ def add(item, user_id):
 
         # add item to database
         add_item(item, quantity, price, user_id)
+        flash("Item added", category="success")
+
+        budget_id = fetch_budget_id(user_id)
+        budget = fetch_budget(budget_id)
+        sub_budget(float(price), budget_id)
+
+        if budget.amount < 0:
+            flash("Budget exceeded!", category="error")
 
         return redirect(url_for("inventory", user_id=user_id))
 
@@ -93,6 +102,14 @@ def edit(item_id, user_id):
 
         # update item in database
         edit_item(item_id, added - removed, price)
+        flash("Item edited!", category="success")
+
+        budget_id = fetch_budget_id(user_id)
+        budget = fetch_budget(budget_id)
+        sub_budget(float(price), budget_id)
+
+        if budget.amount < 0:
+            flash("Budget exceeded!", category="error")
 
         return redirect(url_for("inventory", user_id=user_id))
 
