@@ -41,7 +41,8 @@ from project.user import (
 @app.route("/")
 def home():
     # return render_template("home.html", user_id = user_id)
-    return render_template("register.html")  # just for now
+    # return render_template("register.html")
+    return render_template("welcome.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -128,6 +129,7 @@ def edit(item_id, user_id):
         added = int(request.form["added"])
         removed = int(request.form["removed"])
         price = request.form["price"]
+        action = request.form["action"]
 
         # update item in database
         edit_item(item_id, added - removed, price)
@@ -139,6 +141,17 @@ def edit(item_id, user_id):
 
         if budget.amount < 0:
             flash("Budget exceeded!", category="error")
+
+        if action == "None":
+            return redirect(url_for('inventory', user_id=user_id))
+
+        elif action == "Units":
+            unit = request.form["unit"]
+            edit_unit(item_id, unit)
+
+        elif action == "Expiration":
+            expiration = request.form["expiration_date"]
+            edit_expiration(item_id, expiration)
 
         return redirect(url_for("inventory", user_id=user_id))
 

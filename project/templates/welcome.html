@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantry Inventory</title>
+    <link rel="stylesheet" href="\static\style.css">
+</head>
+<body>
+    <div class="container_home">
+        <h1>Welcome to Pantry Inventory</h1>
+        <form action="{{ url_for('login') }}" method="GET">
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+
+        <form action="{{ url_for('register') }}" method="GET">
+            <button type="submit" class="btn btn-primary">Get Started</button>
+        </form>
+    </div>
+</body>
+</html>

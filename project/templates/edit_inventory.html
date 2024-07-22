@@ -3,6 +3,28 @@
 {% block title %}Pantry Inventory{% endblock %}
 
 {% block content %}
+    <script>
+        function updateForm() {
+            var action = document.getElementById("action").value;
+            var formFields = document.getElementById("form-group");
+            formFields.innerHTML = '';
+
+            if (action == "Units") {
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "unit";
+                input.placeholder = "Enter new unit";
+                formFields.appendChild(input);
+            } else if (action == "Expiration") {
+                var input = document.createElement("input");
+                input.type = "date";
+                input.name = "expiration_date";
+                input.placeholder = "Enter new expiration date";
+                formFields.appendChild(input);
+            }
+        }
+    </script>
+
     <h1>Edit Inventory</h1>
 
     <form action="{{ url_for('edit', item_id=item_id, user_id = user_id) }}" method="POST">
@@ -16,6 +38,15 @@
         <label for="price">Enter the cost of {{item_object.item}}</label>
         <input type="number" id="price" name="price" step="0.01" required/>
 
+        <label for="action">Edit units or expiration date:</label>
+        <select name="action" id="action" onchange="updateForm()">
+            <option value="None">Don't Edit Units or Expiration</option>
+            <option value="Units">Edit Unit</option>
+            <option value="Expiration">Edit Expiration Date</option>
+        </select>
+        <div id="form-group"></div>
+        <br>
+
         <button type="submit">Edit Item</button>
     </form>
 
@@ -23,8 +54,9 @@
         <h2>Item to be Edited</h2>
         <ul>
             <li><b>{{ item_object.item }}</b></li>
-                - Quantity: {{ item_object.quantity }}
-                <br>- Cost: {{ "$%.2f"|format(item_object.price) }}
+                - Quantity: {{ item_object.quantity }} {{item_object.unit}}
+                <br>- Most Recent Cost: {{ "$%.2f"|format(item_object.price) }}
+                <br>- Expiration Date: {{ item_object.expiration}}
         </ul>
     </div>
 

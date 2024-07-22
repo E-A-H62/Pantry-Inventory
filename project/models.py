@@ -42,7 +42,8 @@ def edit_item(item_id, quant, price):
     item = fetch_item(item_id)
     if item:
         item.quantity += quant
-        item.price = float(price)
+        if float(price) != 0:
+            item.price = float(price)
         db.session.commit()
     else:
         print("Item not found.")

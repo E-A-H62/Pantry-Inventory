@@ -12,6 +12,8 @@
     color: #333;
     background-image: url('https://www.sunset.com/wp-content/uploads/pantry-catherine-mccord-pc-colin-price-1200x600.jpg');
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     text-align: center;
   }
   
@@ -139,6 +141,15 @@
 .container {
   max-width: 400px;
   margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container_home {
+  max-width: 400px;
+  margin: 200px auto;
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;

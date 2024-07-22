@@ -16,7 +16,7 @@
         <h2>Inventory List</h2>
         <ul>
             {% for entry in pantry_items %}
-                <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+                <li>{{ entry.item }} - Quantity: {{ entry.quantity }} {{ entry.unit}}</li>
             {% endfor %}
         </ul>
     </div>
