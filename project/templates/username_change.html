@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="container">
-        <form action="{{ url_for("update_username", user_id = user_id) }}" method="POST">
+        <form action="{{ url_for('update_username', user_id = user_id) }}" method="POST">
             <label for="password">Enter current Password:</label>
             <input type="text" id="password" name="password" required/>
 

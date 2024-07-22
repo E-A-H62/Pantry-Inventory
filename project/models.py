@@ -7,9 +7,11 @@ class PantryItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, nullable=False)
+    unit = db.Column(db.String(100), nullable=False)
+    expiration = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
-        return f"<PantryItem {self.item} (x{self.quantity}) ${self.price}>"
+        return f"{self.item}"
 
 
 class User(db.Model):
@@ -30,7 +32,7 @@ class Budget(db.Model):
 
 def add_item(item_name, quant, price, user_id):
     new_item = PantryItem(
-        item=item_name, quantity=int(quant), price=float(price), user_id=user_id
+        item=item_name, quantity=int(quant), price=float(price), user_id=user_id, unit="(Unit not yet set)", expiration="(Expiration not yet set)"
     )
     db.session.add(new_item)
     db.session.commit()
@@ -44,6 +46,20 @@ def edit_item(item_id, quant, price):
         db.session.commit()
     else:
         print("Item not found.")
+
+
+def edit_unit(item_id, unit):
+    item = fetch_item(item_id)
+    if item:
+        item.unit = unit
+        db.session.commit()
+
+
+def edit_expiration(item_id, expiration):
+    item = fetch_item(item_id)
+    if item:
+        item.expiration = expiration
+        db.session.commit()
 
 
 def remove_item(item_id):
