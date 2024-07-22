@@ -175,3 +175,73 @@ nav ul li a:hover {
 .content {
   padding: 20px;
 }
+
+.recipe-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.recipe-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.recipe-card h2 {
+  margin-top: 0;
+}
+
+.recipe-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.save-form {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.save-button:hover {
+  color: #007bff;
+}
+
+/* Flash messages */
+.flash-message {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f8d7da; /* Change this color as needed */
+  color: #721c24; /* Change this color as needed */
+  padding: 10px 20px;
+  border: 1px solid #f5c6cb; /* Change this color as needed */
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.flash-message.show {
+  top: 20px;
+  opacity: 1;
+}
+
+.flash-message.hide {
+  top: -100px;
+  opacity: 0;
+}

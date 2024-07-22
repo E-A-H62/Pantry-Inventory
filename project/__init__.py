@@ -1,3 +1,4 @@
+import json
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,3 +11,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 import project.models as models, project.routes as routes  # noqa: F401, E402, E401, E501
+
+@app.template_filter('fromjson')
+def fromjson(value):
+    return json.loads(value)

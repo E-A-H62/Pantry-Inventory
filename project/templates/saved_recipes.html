@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Saved Recipes{% endblock %}
+
+{% block content %}
+    <h1>Saved Recipes</h1>
+    <div class="recipe-container">
+        {% if recipes %}
+            {% for recipe in recipes %}
+                <div class="recipe-card">
+                    <h2>{{ recipe.title }}</h2>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+                    <p><strong>Likes:</strong> {{ recipe.likes }}</p>
+                    <p><strong>Used Ingredients:</strong></p>
+                    <ul>
+                        {% for ingredient in recipe.used_ingredients | fromjson %}
+                        <li>{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p><strong>Missed Ingredients:</strong></p>
+                    <ul>
+                        {% for ingredient in recipe.missed_ingredients | fromjson %}
+                        <li>{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                    <form action="{{ url_for('unsave_recipe', user_id=user_id, recipe_id=recipe.id) }}" method="POST" class="save-form">
+                        <button type="submit" class="save-button">
+                            Unsave <i class="fas fa-bookmark"></i>
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No saved recipes found.</p>
+        {% endif %}
+    </div>
+    <a href="{{ url_for('inventory', user_id=user_id) }}">Back to Inventory</a>
+{% endblock %}
