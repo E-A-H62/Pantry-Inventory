@@ -1,4 +1,5 @@
 import git
+import json
 from flask import (
     render_template,
     request,
@@ -16,6 +17,7 @@ from project.models import (
 )
 from project.models import (
     PantryItem,
+    SavedRecipe,
     fetch_item,
     fetch_item_id,
     fetch_items,
@@ -183,9 +185,50 @@ def webhook():
     return "Wrong event type", 400
 
 
+@app.route('/<user_id>/save_recipe', methods=['POST'])
+def save_recipe(user_id):
+    api_id = request.form.get('api_id')
+    title = request.form.get('title')
+    image = request.form.get('image')
+    likes = request.form.get('likes')
+    
+    used_ingredients = json.dumps(request.form.getlist('usedIngredients'))
+    missed_ingredients = json.dumps(request.form.getlist('missedIngredients'))
+
+    existing_recipe = SavedRecipe.query.filter_by(api_id=api_id, user_id=user_id).first()
+    if not existing_recipe:
+        new_recipe = SavedRecipe(
+            api_id=api_id, title=title, image=image, likes=likes,
+            used_ingredients=used_ingredients, missed_ingredients=missed_ingredients,
+            user_id=user_id
+        )
+        db.session.add(new_recipe)
+        db.session.commit()
+
+    flash('Recipe saved!', 'success')
+    return redirect(url_for('recipes', user_id=user_id))
+
+
+@app.route('/<user_id>/unsave_recipe/<int:recipe_id>', methods=['POST'])
+def unsave_recipe(user_id, recipe_id):
+    saved_recipe = SavedRecipe.query.filter_by(id=recipe_id, user_id=user_id).first()
+    if saved_recipe:
+        db.session.delete(saved_recipe)
+        db.session.commit()
+        flash('Recipe unsaved!', 'success')
+    return redirect(url_for('saved_recipes', user_id=user_id))
+
+
+@app.route('/<user_id>/saved_recipes')
+def saved_recipes(user_id):
+    saved_recipes = SavedRecipe.query.filter_by(user_id=user_id).all()
+    recipes = [saved_recipe for saved_recipe in saved_recipes]
+    return render_template('saved_recipes.html', recipes=recipes, user_id=user_id)
+
+
 @app.route("/<user_id>/recipes", methods=["GET", "POST"])
 def recipes(user_id):
-    pantry_items = PantryItem.query.all()
+    pantry_items = fetch_items(user_id)
     ingredients = ",".join([item.item for item in pantry_items])
     recipe_data = get_recipes_from_api(ingredients)
     return render_template("recipes.html", recipes=recipe_data, user_id=user_id)

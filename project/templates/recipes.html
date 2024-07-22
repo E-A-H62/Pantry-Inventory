@@ -22,11 +22,26 @@
                         <li>{{ ingredient.original }}</li>
                         {% endfor %}
                     </ul>
+                    <form action="{{ url_for('save_recipe', user_id=user_id) }}" method="POST" class="save-form">
+                        <input type="hidden" name="api_id" value="{{ recipe.id }}">
+                        <input type="hidden" name="title" value="{{ recipe.title }}">
+                        <input type="hidden" name="image" value="{{ recipe.image }}">
+                        <input type="hidden" name="likes" value="{{ recipe.likes }}">
+                        {% for ingredient in recipe.usedIngredients %}
+                            <input type="hidden" name="usedIngredients" value="{{ ingredient.original }}">
+                        {% endfor %}
+                        {% for ingredient in recipe.missedIngredients %}
+                            <input type="hidden" name="missedIngredients" value="{{ ingredient.original }}">
+                        {% endfor %}
+                        <button type="submit" class="save-button">
+                            Save Recipe <i class="fas fa-bookmark"></i>
+                        </button>
+                    </form>
                 </div>
             {% endfor %}
         {% else %}
             <p>No recipes found for the given ingredients.</p>
         {% endif %}
     </div>
-    <a href="\inventory">Back to Inventory</a>
+    <a href="{{ url_for('inventory', user_id=user_id) }}">Back to Inventory</a>
 {% endblock %}

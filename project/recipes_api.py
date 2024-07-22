@@ -9,7 +9,7 @@ def get_recipes_from_api(ingredients):
     params = {
         "apiKey": API_KEY,
         "ingredients": ingredients,
-        "number": 4,  # Number of recipes to return
+        "number": 6,  # Number of recipes to return
         "ranking": 1,
         "ignorePantry": True,
     }
