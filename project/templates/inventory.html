@@ -16,16 +16,8 @@
         <h2>Inventory List</h2>
         <ul>
             {% for entry in pantry_items %}
-                <li>{{ entry.item }} - Quantity: {{ entry.quantity }}</li>
+                <li>{{ entry.item }} - Quantity: {{ entry.quantity }} {{ entry.unit}}</li>
             {% endfor %}
         </ul>
     </div>
-
-    <form action="/" method="GET">
-        <button type="submit" class="btn btn-primary">Home</button>
-    </form>
-
-    <form action="{{ url_for('shopping' , user_id = user_id) }}" method="GET">
-        <button type="submit">Budget</button>
-    </form>
 {% endblock %}

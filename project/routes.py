@@ -7,7 +7,7 @@ from flask import (
     url_for,
     flash,
 )
-from project import app, db  # noqa: F401
+from project import app, db
 from project.models import (
     add_item,
     edit_item,
@@ -15,7 +15,7 @@ from project.models import (
     edit_unit,
     edit_expiration,
 )
-from project.models import (
+from project.models import (  # noqa: F401
     PantryItem,
     SavedRecipe,
     fetch_item,
@@ -43,7 +43,8 @@ from project.user import (
 @app.route("/")
 def home():
     # return render_template("home.html", user_id = user_id)
-    return render_template("register.html")  # just for now
+    # return render_template("register.html")
+    return render_template("welcome.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -59,7 +60,7 @@ def register():
             set_budget(user_id)  # noqa: F841
             flash("Account created!", category="success")
             return redirect(url_for("login"))
-        
+
         flash("Error: Account already associated with this email", category="error")
 
     return render_template("register.html")
@@ -132,6 +133,7 @@ def edit(item_id, user_id):
         added = int(request.form["added"])
         removed = int(request.form["removed"])
         price = request.form["price"]
+        action = request.form["action"]
 
         # update item in database
         edit_item(item_id, added - removed, price)
@@ -143,6 +145,17 @@ def edit(item_id, user_id):
 
         if budget.amount < 0:
             flash("Budget exceeded!", category="error")
+
+        if action == "None":
+            return redirect(url_for('inventory', user_id=user_id))
+
+        elif action == "Units":
+            unit = request.form["unit"]
+            edit_unit(item_id, unit)
+
+        elif action == "Expiration":
+            expiration = request.form["expiration_date"]
+            edit_expiration(item_id, expiration)
 
         return redirect(url_for("inventory", user_id=user_id))
 
@@ -180,7 +193,7 @@ def save_recipe(user_id):
     title = request.form.get('title')
     image = request.form.get('image')
     likes = request.form.get('likes')
-    
+
     used_ingredients = json.dumps(request.form.getlist('usedIngredients'))
     missed_ingredients = json.dumps(request.form.getlist('missedIngredients'))
 
@@ -325,7 +338,6 @@ def update_password(user_id):
 
         # notify the user that the password was incorrect
         flash("Error: Invalid Password. Please try again.", category="error")
-
 
     return render_template(
         "password_change.html",

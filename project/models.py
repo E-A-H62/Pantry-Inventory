@@ -41,7 +41,7 @@ class SavedRecipe(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     user = db.relationship('User', backref=db.backref('saved_recipes', lazy=True))
 
-    
+
 def add_item(item_name, quant, price, user_id):
     new_item = PantryItem(
         item=item_name, quantity=int(quant), price=float(price), user_id=user_id, unit="(Unit not yet set)", expiration="(Expiration not yet set)"
@@ -54,7 +54,8 @@ def edit_item(item_id, quant, price):
     item = fetch_item(item_id)
     if item:
         item.quantity += quant
-        item.price = float(price)
+        if float(price) != 0:
+            item.price = float(price)
         db.session.commit()
     else:
         print("Item not found.")
@@ -107,8 +108,10 @@ def fetch_user_id(username, password):
 
     return user.user_id if user else user
 
+
 def check_unique_email(email):
     return db.session.query(User).filter_by(email=email).first()
+
 
 def add_user(username, password, email):
     if not fetch_user_id(username, password) and not check_unique_email(email):
