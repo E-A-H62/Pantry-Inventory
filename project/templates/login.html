@@ -2,24 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <ul class=flashes>
-      {% for category, message in messages %}
-        <li class="{{ category }}">{{ message }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-    {% endwith %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pantry Inventory{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="\static\style.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <form method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+  <h1>Login</h1>
+  <form method="POST">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+  </form>
+
+  <div class="container">
     <a href="\register">Don't have an account? Register here.</a>
+  </div>
+  
+</body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-container">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+<script src="{{ url_for('static', filename='flash_messages.js') }}"></script>
 </body>
 </html>
