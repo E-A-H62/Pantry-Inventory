@@ -107,9 +107,11 @@ def fetch_user_id(username, password):
 
     return user.user_id if user else user
 
+def check_unique_email(email):
+    return db.session.query(User).filter_by(email=email).first()
 
 def add_user(username, password, email):
-    if not fetch_user_id(username, password):
+    if not fetch_user_id(username, password) and not check_unique_email(email):
         new_user = User(username=username, password=password, email=email)
         db.session.add(new_user)
         db.session.commit()

@@ -56,9 +56,11 @@ def register():
 
         if sign_up(username, password, email):
             user_id = sign_in(username, password)
-            budget = set_budget(user_id)  # noqa: F841
+            set_budget(user_id)  # noqa: F841
             flash("Account created!", category="success")
             return redirect(url_for("login"))
+        
+        flash("Error: Account already associated with this email", category="error")
 
     return render_template("register.html")
 
@@ -279,6 +281,7 @@ def update_username(user_id):
             return redirect(url_for("profile", user_id=user_id))
 
         # notify the user that the password was incorrect
+        flash("Error: Invalid Password. Please try again.", category="error")
 
     return render_template(
         "username_change.html",
@@ -301,6 +304,7 @@ def update_email(user_id):
             return redirect(url_for("profile", user_id=user_id))
 
         # notify the user that the password was incorrect
+        flash("Error: Invalid Password. Please try again.", category="error")
 
     return render_template(
         "email_change.html", user_id=user_id, username=user.username, email=user.email
@@ -320,6 +324,8 @@ def update_password(user_id):
             return redirect(url_for("profile", user_id=user_id))
 
         # notify the user that the password was incorrect
+        flash("Error: Invalid Password. Please try again.", category="error")
+
 
     return render_template(
         "password_change.html",
