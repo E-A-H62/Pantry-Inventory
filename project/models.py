@@ -41,7 +41,7 @@ class SavedRecipe(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
     user = db.relationship('User', backref=db.backref('saved_recipes', lazy=True))
 
-    
+
 def add_item(item_name, quant, price, user_id):
     new_item = PantryItem(
         item=item_name, quantity=int(quant), price=float(price), user_id=user_id, unit="(Unit not yet set)", expiration="(Expiration not yet set)"

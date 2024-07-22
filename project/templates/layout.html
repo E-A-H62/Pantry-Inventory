@@ -12,9 +12,11 @@
         <ul>
             <li><a href="\">Home</a></li>
             <li><a href="{{ url_for('inventory', user_id = user_id) }}">Inventory</a></li>
+            <li><a href="{{ url_for('shopping' , user_id = user_id) }}">Budget</a></li>
+            <li><a href="{{ url_for('cart' , user_id = user_id) }}">Cart</a></li>
             <li><a href="{{ url_for('recipes', user_id = user_id) }}">Recipes</a></li>
             <li><a href="{{ url_for('saved_recipes', user_id = user_id) }}">Saved Recipes</a></li>
-            <li><a href="{{ url_for('profile', user_id = user_id) }}">Profile</a>></li>
+            <li><a href="{{ url_for('profile', user_id = user_id) }}">Profile</a></li>
         </ul>
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %}

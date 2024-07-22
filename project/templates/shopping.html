@@ -8,6 +8,9 @@
     <div class="container">
         <h2>Current Budget</h2>
         <h2>{{ "$%.2f"|format(budget.amount) }}</h2>
+        <form action="{{ url_for('shopping' , user_id = user_id) }}" method="POST">
+            <button type="submit">Edit Budget</button>
+        </form>
     </div>
 
     <div class="container">
@@ -20,15 +23,4 @@
         </ul>
     </div>
 
-    <form action="{{ url_for('shopping' , user_id = user_id) }}" method="POST">
-        <button type="submit">Edit Budget</button>
-    </form>
-
-    <form action="{{ url_for('cart' , user_id = user_id) }}" method="GET">
-        <button type="submit">Cart</button>
-    </form>
-
-    <form action="/" method="GET">
-        <button type="submit" class="btn btn-primary">Home</button>
-    </form>
 {% endblock %}

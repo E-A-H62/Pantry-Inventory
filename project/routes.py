@@ -7,7 +7,7 @@ from flask import (
     url_for,
     flash,
 )
-from project import app, db  # noqa: F401
+from project import app, db
 from project.models import (
     add_item,
     edit_item,
@@ -15,7 +15,7 @@ from project.models import (
     edit_unit,
     edit_expiration,
 )
-from project.models import (
+from project.models import (  # noqa: F401
     PantryItem,
     SavedRecipe,
     fetch_item,
@@ -191,7 +191,7 @@ def save_recipe(user_id):
     title = request.form.get('title')
     image = request.form.get('image')
     likes = request.form.get('likes')
-    
+
     used_ingredients = json.dumps(request.form.getlist('usedIngredients'))
     missed_ingredients = json.dumps(request.form.getlist('missedIngredients'))
 
