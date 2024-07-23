@@ -135,10 +135,9 @@ def add(item, user_id):
             edit_expiration(item_id, expiration)
 
             return redirect(url_for("inventory", user_id=user_id))
-        
-        else: 
-            flash("Invalid desired quantity or price", category="error")
 
+        else:
+            flash("Invalid desired quantity or price", category="error")
 
     return render_template("add_inventory.html", item=item, user_id=user_id)
 
@@ -181,7 +180,7 @@ def edit(item_id, user_id):
             edit_expiration(item_id, expiration)
 
             return redirect(url_for("inventory", user_id=user_id))
-        
+
         else:
             flash("Invalid entries for item", category="error")
 
@@ -342,7 +341,7 @@ def update_email(user_id):
             if not check_unique_email(new_email):
                 change_email(user_id, new_email)
                 return redirect(url_for("profile", user_id=user_id))
-            
+
             flash("Error: Email is already associated with another account", category="error")
 
         else:
