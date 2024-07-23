@@ -10,7 +10,6 @@
 <body>
     <nav>
         <ul>
-            <li><a href="\">Home</a></li>
             <li><a href="{{ url_for('inventory', user_id = user_id) }}">Inventory</a></li>
             <li><a href="{{ url_for('shopping' , user_id = user_id) }}">Budget</a></li>
             <li><a href="{{ url_for('cart' , user_id = user_id) }}">Restock</a></li>

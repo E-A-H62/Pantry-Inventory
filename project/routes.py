@@ -14,6 +14,7 @@ from project.models import (
     remove_item,
     edit_unit,
     edit_expiration,
+    check_unique_email
 )
 from project.models import (  # noqa: F401
     PantryItem,
@@ -133,7 +134,11 @@ def add(item, user_id):
         if expiration:
             edit_expiration(item_id, expiration)
 
-        return redirect(url_for("inventory", user_id=user_id))
+            return redirect(url_for("inventory", user_id=user_id))
+        
+        else: 
+            flash("Invalid desired quantity or price", category="error")
+
 
     return render_template("add_inventory.html", item=item, user_id=user_id)
 
@@ -146,7 +151,7 @@ def edit(item_id, user_id):
     if request.method == "POST":
         added = int(request.form["added"])
         removed = int(request.form["removed"])
-        price = request.form["price"]
+        price = float(request.form["price"])
         unit = request.form["unit"]
         expiration = request.form["expiration"]
 
@@ -155,12 +160,16 @@ def edit(item_id, user_id):
             flash("You do not have enough of this item to remove!", category="error")
             return redirect(url_for("inventory", user_id=user_id))
 
+        if price < 0:
+            flash("Invalid price for items", category="error")
+            return redirect(url_for("inventory", user_id=user_id))
+
         edit_item(item_id, added - removed, price)
         flash("Item edited!", category="success")
 
         budget_id = fetch_budget_id(user_id)
         budget = fetch_budget(budget_id)
-        sub_budget(float(price), budget_id)
+        sub_budget(price, budget_id)
 
         if budget.amount < 0:
             flash("Budget exceeded!", category="error")
@@ -171,7 +180,10 @@ def edit(item_id, user_id):
         if expiration:
             edit_expiration(item_id, expiration)
 
-        return redirect(url_for("inventory", user_id=user_id))
+            return redirect(url_for("inventory", user_id=user_id))
+        
+        else:
+            flash("Invalid entries for item", category="error")
 
     return render_template(
         "edit_inventory.html", item_id=item_id, item_object=item_object, user_id=user_id
@@ -327,11 +339,15 @@ def update_email(user_id):
         password = request.form["password"]
 
         if user.password == password:
-            change_email(user_id, new_email)
-            return redirect(url_for("profile", user_id=user_id))
+            if not check_unique_email(new_email):
+                change_email(user_id, new_email)
+                return redirect(url_for("profile", user_id=user_id))
+            
+            flash("Error: Email is already associated with another account", category="error")
 
-        # notify the user that the password was incorrect
-        flash("Error: Invalid Password. Please try again.", category="error")
+        else:
+            # notify the user that the password was incorrect
+            flash("Error: Invalid Password. Please try again.", category="error")
 
     return render_template(
         "email_change.html", user_id=user_id, username=user.username, email=user.email
