@@ -107,17 +107,31 @@ def add(item, user_id):
     if request.method == "POST":
         quantity = request.form["quantity"]
         price = request.form["price"]
+        unit = request.form["unit"]
+        expiration = request.form["expiration"]
+        budget_id = fetch_budget_id(user_id)
+        budget = fetch_budget(budget_id)
+
+        if int(quantity) < 0:
+            flash("Adding an invalid amount!", category="error")
+            return redirect(url_for("inventory", user_id=user_id))
+
+        if float(budget.amount) - float(price) < 0:
+            flash("You will exceed your budget! Please set a new amount to your budget before proceeding.", category="error")
+            return redirect(url_for("inventory", user_id=user_id))
 
         # add item to database
         add_item(item, quantity, price, user_id)
+        item_id = fetch_item_id(item, user_id)
         flash("Item added", category="success")
 
-        budget_id = fetch_budget_id(user_id)
-        budget = fetch_budget(budget_id)
         sub_budget(float(price), budget_id)
 
-        if budget.amount < 0:
-            flash("Budget exceeded!", category="error")
+        if unit:
+            edit_unit(item_id, unit)
+
+        if expiration:
+            edit_expiration(item_id, expiration)
 
         return redirect(url_for("inventory", user_id=user_id))
 
@@ -133,9 +147,14 @@ def edit(item_id, user_id):
         added = int(request.form["added"])
         removed = int(request.form["removed"])
         price = request.form["price"]
-        action = request.form["action"]
+        unit = request.form["unit"]
+        expiration = request.form["expiration"]
 
         # update item in database
+        if item_object.quantity - removed < 0:
+            flash("You do not have enough of this item to remove!", category="error")
+            return redirect(url_for("inventory", user_id=user_id))
+
         edit_item(item_id, added - removed, price)
         flash("Item edited!", category="success")
 
@@ -146,15 +165,10 @@ def edit(item_id, user_id):
         if budget.amount < 0:
             flash("Budget exceeded!", category="error")
 
-        if action == "None":
-            return redirect(url_for('inventory', user_id=user_id))
-
-        elif action == "Units":
-            unit = request.form["unit"]
+        if unit:
             edit_unit(item_id, unit)
 
-        elif action == "Expiration":
-            expiration = request.form["expiration_date"]
+        if expiration:
             edit_expiration(item_id, expiration)
 
         return redirect(url_for("inventory", user_id=user_id))
@@ -362,13 +376,14 @@ def cart(user_id):
         elif action == "Remove":
             remove_item(item_id)
 
-        elif action == "Units":
+        elif action == "Both":
             unit = request.form["unit"]
-            edit_unit(item_id, unit)
-
-        elif action == "Expiration":
             expiration = request.form["expiration_date"]
-            edit_expiration(item_id, expiration)
+            if unit:
+                edit_unit(item_id, unit)
+            if expiration:
+                edit_expiration(item_id, expiration)
+
         return redirect(url_for('cart', user_id=user_id))
 
     return render_template(
