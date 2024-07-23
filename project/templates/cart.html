@@ -3,10 +3,10 @@
 {% block title %}Pantry Inventory{% endblock %}
 
 {% block content %}
-    <h1>Shopping Cart</h1>
+    <h1>Restocking</h1>
 
     <div class="container">
-        <h2>Current Cart</h2>
+        <h2>Items to Restock</h2>
         <p>You are out of these items in your pantry.</p>
         <ul>
             {% for entry in pantry_items %}
@@ -37,18 +37,17 @@
             var formFields = document.getElementById("form-group");
             formFields.innerHTML = '';
 
-            if (action == "Units") {
-                var input = document.createElement("input");
-                input.type = "text";
-                input.name = "unit";
-                input.placeholder = "Enter new unit";
-                formFields.appendChild(input);
-            } else if (action == "Expiration") {
-                var input = document.createElement("input");
-                input.type = "date";
-                input.name = "expiration_date";
-                input.placeholder = "Enter new expiration date";
-                formFields.appendChild(input);
+            if (action == "Both") {
+                var input1 = document.createElement("input");
+                var input2 = document.createElement("input");
+                input1.type = "text";
+                input2.type = "date";
+                input1.name = "unit";
+                input2.name = "expiration_date";
+                input1.placeholder = "Enter new unit";
+                input2.placeholder = "Enter new expiration date";
+                formFields.appendChild(input1);
+                formFields.appendChild(input2);
             }
         }
     </script>
@@ -66,10 +65,9 @@
 
         <label for="action">Action:</label>
         <select name="action" id="action" onchange="updateForm()">
-            <option value="Add">Add</option>
-            <option value="Remove">Remove</option>
-            <option value="Units">Edit Unit</option>
-            <option value="Expiration">Edit Expiration Date</option>
+            <option value="Add">Add more of item to pantry</option>
+            <option value="Remove">Remove item from pantry</option>
+            <option value="Both">Edit units and/or expiration date of item</option>
         </select>
         <div id="form-group"></div>
         <br>
