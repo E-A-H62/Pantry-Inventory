@@ -134,10 +134,7 @@ def add(item, user_id):
         if expiration:
             edit_expiration(item_id, expiration)
 
-            return redirect(url_for("inventory", user_id=user_id))
-
-        else:
-            flash("Invalid desired quantity or price", category="error")
+        return redirect(url_for("inventory", user_id=user_id))
 
     return render_template("add_inventory.html", item=item, user_id=user_id)
 
@@ -179,10 +176,7 @@ def edit(item_id, user_id):
         if expiration:
             edit_expiration(item_id, expiration)
 
-            return redirect(url_for("inventory", user_id=user_id))
-
-        else:
-            flash("Invalid entries for item", category="error")
+        return redirect(url_for("inventory", user_id=user_id))
 
     return render_template(
         "edit_inventory.html", item_id=item_id, item_object=item_object, user_id=user_id
