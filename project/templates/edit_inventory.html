@@ -19,8 +19,6 @@
         <label for="unit">Enter the unit of {{item_object.item}} to add:</label>
         <input type="text" id="unit" name="unit"/>
 
-        <label for="expiration">Enter the amount of {{item_object.item}} to remove:</label>
-        <input type="date" id="expiration" name="expiration"/>
         <br><br>
 
         <button type="submit">Edit Item</button>
@@ -32,7 +30,6 @@
             <li><b>{{ item_object.item }}</b></li>
                 - Quantity: {{ item_object.quantity }} {{item_object.unit}}
                 <br>- Most Recent Cost: {{ "$%.2f"|format(item_object.price) }}
-                <br>- Expiration Date: {{ item_object.expiration}}
         </ul>
     </div>
 

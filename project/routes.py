@@ -13,7 +13,6 @@ from project.models import (
     edit_item,
     remove_item,
     edit_unit,
-    edit_expiration,
     check_unique_email
 )
 from project.models import (  # noqa: F401
@@ -109,7 +108,6 @@ def add(item, user_id):
         quantity = request.form["quantity"]
         price = request.form["price"]
         unit = request.form["unit"]
-        expiration = request.form["expiration"]
         budget_id = fetch_budget_id(user_id)
         budget = fetch_budget(budget_id)
 
@@ -131,9 +129,6 @@ def add(item, user_id):
         if unit:
             edit_unit(item_id, unit)
 
-        if expiration:
-            edit_expiration(item_id, expiration)
-
         return redirect(url_for("inventory", user_id=user_id))
 
     return render_template("add_inventory.html", item=item, user_id=user_id)
@@ -149,7 +144,6 @@ def edit(item_id, user_id):
         removed = int(request.form["removed"])
         price = float(request.form["price"])
         unit = request.form["unit"]
-        expiration = request.form["expiration"]
 
         # update item in database
         if item_object.quantity - removed < 0:
@@ -173,8 +167,6 @@ def edit(item_id, user_id):
         if unit:
             edit_unit(item_id, unit)
 
-        if expiration:
-            edit_expiration(item_id, expiration)
 
         return redirect(url_for("inventory", user_id=user_id))
 
@@ -387,11 +379,9 @@ def cart(user_id):
 
         elif action == "Both":
             unit = request.form["unit"]
-            expiration = request.form["expiration_date"]
+
             if unit:
                 edit_unit(item_id, unit)
-            if expiration:
-                edit_expiration(item_id, expiration)
 
         return redirect(url_for('cart', user_id=user_id))
 

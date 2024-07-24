@@ -8,7 +8,6 @@ class PantryItem(db.Model):
     price = db.Column(db.Float, nullable=False)
     user_id = db.Column(db.Integer, nullable=False)
     unit = db.Column(db.String(100), nullable=False)
-    expiration = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f"{self.item}"
@@ -44,7 +43,7 @@ class SavedRecipe(db.Model):
 
 def add_item(item_name, quant, price, user_id):
     new_item = PantryItem(
-        item=item_name, quantity=int(quant), price=float(price), user_id=user_id, unit="(Unit not yet set)", expiration="(Expiration not yet set)"
+        item=item_name, quantity=int(quant), price=float(price), user_id=user_id, unit="(Unit not yet set)"
     )
     db.session.add(new_item)
     db.session.commit()
@@ -67,12 +66,6 @@ def edit_unit(item_id, unit):
         item.unit = unit
         db.session.commit()
 
-
-def edit_expiration(item_id, expiration):
-    item = fetch_item(item_id)
-    if item:
-        item.expiration = expiration
-        db.session.commit()
 
 
 def remove_item(item_id):
