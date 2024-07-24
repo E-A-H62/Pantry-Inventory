@@ -67,7 +67,6 @@ def edit_unit(item_id, unit):
         db.session.commit()
 
 
-
 def remove_item(item_id):
     item = fetch_item(item_id)
     db.session.delete(item)

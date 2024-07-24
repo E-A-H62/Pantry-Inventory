@@ -167,7 +167,6 @@ def edit(item_id, user_id):
         if unit:
             edit_unit(item_id, unit)
 
-
         return redirect(url_for("inventory", user_id=user_id))
 
     return render_template(
